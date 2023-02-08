@@ -1,10 +1,13 @@
 <template>
   <main>
-    <div id="TGMap" style="width: 100%; height: 100vh"></div>
+    <TG.Map></TG.Map>
   </main>
 </template>
 
 <script setup>
+import { TG } from "@/tgos";
+console.log(TG);
+/*
 import { onMounted } from "vue";
 import mygeodata from "../assets/station.json";
 import { initTGMap } from "@/utils/tgos";
@@ -93,4 +96,5 @@ function polygonProcesser(graphic) {
     openInfoWindow(args.point, graphic.properties.Name);
   });
 }
+*/
 </script>
