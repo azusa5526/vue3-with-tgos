@@ -149,6 +149,7 @@ export declare class TGData {
   constructor(opts?: TGDataOptions) {}
   add(graphic: TGGraphic | TGGraphicOptions): void {}
   addGeoJson(geoJson: object): TGGraphic[] {}
+  removeAllGraphics() {}
 }
 
 interface TGGraphicOptions {

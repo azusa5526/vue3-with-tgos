@@ -4,7 +4,16 @@ export let TGOS = null as any as TGOSDoc;
 
 export async function useTGOS(): Promise<TGOSDoc> {
   await requireTGOSAPI();
+  patch();
   return (TGOS = window.TGOS);
+}
+
+function patch() {
+  window.TGOS.TGData.prototype.removeAllGraphics = function (this: any) {
+    while (this.graphics.length) {
+      this.remove(this.graphics[0]);
+    }
+  };
 }
 
 async function requireTGOSAPI() {

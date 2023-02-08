@@ -7,12 +7,14 @@
 <script setup>
 import { onMounted } from "vue";
 import mygeodata from "../assets/station.json";
+import mygeodata2 from "../assets/station2.json";
 import { initTGMap } from "@/utils/tgos";
 import { TGOS, useTGOS } from "@/utils/use-tgos";
 
 let pMap = null;
 let infoWindow = null;
 let tgosData = null;
+let tgosData2 = null;
 
 onMounted(async () => {
   await useTGOS();
@@ -53,6 +55,13 @@ function loadGeoJson() {
   if (!pMap) return;
   tgosData = new TGOS.TGData({ map: pMap });
   tgosData.addGeoJson(mygeodata);
+
+  tgosData2 = new TGOS.TGData({ map: pMap });
+  tgosData2.addGeoJson(mygeodata2);
+
+  // console.log("loadGeoJson tgosData2", tgosData2);
+  // tgosData2.removeAllGraphics();
+  // console.log("loadGeoJson tgosData2", tgosData2);
 }
 
 function processData() {

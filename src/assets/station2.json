@@ -1,0 +1,67 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.214223, 25.013794]
+      },
+      "properties": {
+        "Name": "A18(高鐵桃園站)",
+        "Type": "高架車站"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.203302, 25.001803]
+      },
+      "properties": {
+        "Name": "A19(桃園體育園區站)",
+        "Type": "高架車站"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.216278, 24.980184]
+      },
+      "properties": {
+        "Name": "A20(興南站)",
+        "Type": "高架車站"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.220688, 24.967479]
+      },
+      "properties": {
+        "Name": "A21(環北站)",
+        "Type": "地下車站"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [121.98591021460503, 25.150033789922833],
+            [121.58503399301893, 25.066548340042456],
+            [121.7131237784139, 24.965314550119622],
+            [121.914, 25.0488]
+          ]
+        ]
+      },
+      "properties": {
+        "Name": "機捷點資料範圍",
+        "Type": "name"
+      }
+    }
+  ]
+}
