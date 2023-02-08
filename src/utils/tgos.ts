@@ -1,8 +1,5 @@
-import type { TGMapOptions, TGOS } from "./tgos-doc";
-import { useTGOS, useTGOSSync } from "./use-tgos";
-
-const TGOS = useTGOSSync();
-
+import type { TGMapOptions, TGOS as TGOSDOC } from "./tgos-doc";
+import { TGOS } from "./use-tgos";
 function assertNonNullish<TValue>(
   value: TValue,
   message: string
@@ -37,5 +34,7 @@ function getMapOptions(): TGMapOptions {
 
   return mapOptions;
 }
+
+
 
 export { initTGMap };
