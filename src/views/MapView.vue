@@ -4,16 +4,15 @@
   </main>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { onMounted } from "vue";
 import mygeodata from "../assets/station.json";
 import { initTGMap } from "@/utils/tgos";
 import { TGOS, useTGOS } from "@/utils/use-tgos";
-import type { TGOnlineMap, TGPoint } from "@/utils/tgos-doc";
 
-let pMap: TGOnlineMap | null = null;
-let infoWindow: any = null;
-let tgosData: any = null;
+let pMap = null;
+let infoWindow = null;
+let tgosData = null;
 
 onMounted(async () => {
   await useTGOS();
@@ -28,7 +27,7 @@ async function initMap() {
   infoWindow = initInfoWindow();
 }
 
-function initInfoWindow(options?: any) {
+function initInfoWindow(options) {
   let infoWindowOptions = options || {
     maxWidth: 300,
     zIndex: 99,
@@ -39,11 +38,7 @@ function initInfoWindow(options?: any) {
   return infoWindow;
 }
 
-function openInfoWindow(
-  point: TGPoint,
-  content: string,
-  offsetState?: boolean
-) {
+function openInfoWindow(point, content, offsetState) {
   console.log("openInfoWindow", infoWindow);
 
   if (offsetState)
@@ -63,7 +58,7 @@ function loadGeoJson() {
 function processData() {
   if (!tgosData) return;
 
-  tgosData.graphics.forEach((graphic: any) => {
+  tgosData.graphics.forEach((graphic) => {
     const graphicType = graphic.geometry.type;
     const processer = new Map([
       ["TGPoint", pointProcesser],
@@ -77,7 +72,7 @@ function processData() {
   });
 }
 
-function pointProcesser(graphic: any) {
+function pointProcesser(graphic) {
   const imgUrl = "./icon/marker.svg";
   const markerImg = new TGOS.TGImage(
     imgUrl,
@@ -93,10 +88,10 @@ function pointProcesser(graphic: any) {
   });
 }
 
-function polygonProcesser(graphic: any) {
+function polygonProcesser(graphic) {
   graphic.gs_[0].setStrokeWeight(10);
 
-  TGOS.TGEvent.addListener(graphic.gs_[0], "click", (args: any) => {
+  TGOS.TGEvent.addListener(graphic.gs_[0], "click", (args) => {
     openInfoWindow(args.point, graphic.properties.Name);
   });
 }
