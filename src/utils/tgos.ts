@@ -1,4 +1,7 @@
-import type { TGMapOptions } from "./tgos-doc";
+import type { TGMapOptions, TGOS } from "./tgos-doc";
+import { useTGOS, useTGOSSync } from "./use-tgos";
+
+const TGOS = useTGOSSync();
 
 function assertNonNullish<TValue>(
   value: TValue,
@@ -9,11 +12,7 @@ function assertNonNullish<TValue>(
   }
 }
 
-let TGOS: Window["TGOS"] | null = null;
-
 async function initTGMap(mapElement: any) {
-  await requireTGOSAPI();
-  TGOS = window.TGOS;
   console.log("initTGMap TGOS", TGOS);
   const map = new TGOS.TGOnlineMap(
     mapElement,
@@ -21,23 +20,6 @@ async function initTGMap(mapElement: any) {
     getMapOptions()
   );
   return map;
-}
-
-async function requireTGOSAPI() {
-  if (!TGOS) {
-    return new Promise((resolve, reject) => {
-      try {
-        const script = document.createElement("script");
-        const src =
-          "http://api.tgos.tw/TGOS_API/tgos?ver=2.5&AppID=x+JLVSx85Lk=&APIKey=in8W74q0ogpcfW/STwicK8D5QwCdddJf05/7nb+OtDh8R99YN3T0LurV4xato3TpL/fOfylvJ9Wv/khZEsXEWxsBmg+GEj4AuokiNXCh14Rei21U5GtJpIkO++Mq3AguFK/ISDEWn4hMzqgrkxNe1Q==";
-        script.addEventListener("load", resolve);
-        script.src = src;
-        document.head.appendChild(script);
-      } catch (err) {
-        reject(err);
-      }
-    });
-  }
 }
 
 function getMapOptions(): TGMapOptions {

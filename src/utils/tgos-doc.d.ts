@@ -175,15 +175,18 @@ declare class TGGraphic {
   toGeoJson(): object {}
 }
 
+export interface TGOS {
+  [key: string]: any;
+  TGOnlineMap: typeof TGOnlineMap;
+  TGData: typeof TGData;
+  TGGraphic: typeof TGGraphic;
+  TGGeometry: typeof TGGeometry;
+  TGPoint: typeof TGPoint;
+  TGEnvelope: typeof TGEnvelope;
+}
+
 declare global {
   interface Window {
-    TGOS: { [key: string]: any } & {
-      TGOnlineMap: typeof TGOnlineMap;
-      TGData: typeof TGData;
-      TGGraphic: typeof TGGraphic;
-      TGGeometry: typeof TGGeometry;
-      TGPoint: typeof TGPoint;
-      TGEnvelope: typeof TGEnvelope;
-    };
+    TGOS: TGOS;
   }
 }
