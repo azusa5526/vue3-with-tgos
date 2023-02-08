@@ -4,15 +4,16 @@
   </main>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { onMounted } from "vue";
 import mygeodata from "../assets/station.json";
 import { initTGMap } from "@/utils/tgos";
 import { TGOS, useTGOS } from "@/utils/use-tgos";
+import type { TGOnlineMap, TGPoint } from "@/utils/tgos-doc";
 
-let pMap = null;
-let infoWindow = null;
-let tgosData = null;
+let pMap: TGOnlineMap | null = null;
+let infoWindow: any = null;
+let tgosData: any = null;
 
 onMounted(async () => {
   await useTGOS();
@@ -23,12 +24,11 @@ onMounted(async () => {
 
 async function initMap() {
   const mapElement = document.getElementById("TGMap");
-  pMap = await initTGMap(mapElement);
-
+  pMap = initTGMap(mapElement);
   infoWindow = initInfoWindow();
 }
 
-function initInfoWindow(options) {
+function initInfoWindow(options?: any) {
   let infoWindowOptions = options || {
     maxWidth: 300,
     zIndex: 99,
@@ -39,7 +39,11 @@ function initInfoWindow(options) {
   return infoWindow;
 }
 
-function openInfoWindow(point, content, offsetState) {
+function openInfoWindow(
+  point: TGPoint,
+  content: string,
+  offsetState?: boolean
+) {
   console.log("openInfoWindow", infoWindow);
 
   if (offsetState)
@@ -51,12 +55,15 @@ function openInfoWindow(point, content, offsetState) {
 }
 
 function loadGeoJson() {
+  if (!pMap) return;
   tgosData = new TGOS.TGData({ map: pMap });
   tgosData.addGeoJson(mygeodata);
 }
 
 function processData() {
-  tgosData.graphics.forEach((graphic) => {
+  if (!tgosData) return;
+
+  tgosData.graphics.forEach((graphic: any) => {
     const graphicType = graphic.geometry.type;
     const processer = new Map([
       ["TGPoint", pointProcesser],
@@ -70,7 +77,7 @@ function processData() {
   });
 }
 
-function pointProcesser(graphic) {
+function pointProcesser(graphic: any) {
   const imgUrl = "./icon/marker.svg";
   const markerImg = new TGOS.TGImage(
     imgUrl,
@@ -86,10 +93,10 @@ function pointProcesser(graphic) {
   });
 }
 
-function polygonProcesser(graphic) {
+function polygonProcesser(graphic: any) {
   graphic.gs_[0].setStrokeWeight(10);
 
-  TGOS.TGEvent.addListener(graphic.gs_[0], "click", (args) => {
+  TGOS.TGEvent.addListener(graphic.gs_[0], "click", (args: any) => {
     openInfoWindow(args.point, graphic.properties.Name);
   });
 }

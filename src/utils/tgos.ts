@@ -1,15 +1,16 @@
-import type { TGMapOptions, TGOS as TGOSDOC } from "./tgos-doc";
+import type { TGMapOptions, TGOnlineMap } from "./tgos-doc";
 import { TGOS } from "./use-tgos";
-function assertNonNullish<TValue>(
-  value: TValue,
-  message: string
-): asserts value is NonNullable<TValue> {
-  if (value === null || value === undefined) {
-    throw Error(message);
-  }
-}
 
-async function initTGMap(mapElement: any) {
+// function assertNonNullish<TValue>(
+//   value: TValue,
+//   message: string
+// ): asserts value is NonNullable<TValue> {
+//   if (value === null || value === undefined) {
+//     throw Error(message);
+//   }
+// }
+
+function initTGMap(mapElement: any): TGOnlineMap {
   console.log("initTGMap TGOS", TGOS);
   const map = new TGOS.TGOnlineMap(
     mapElement,
@@ -20,7 +21,7 @@ async function initTGMap(mapElement: any) {
 }
 
 function getMapOptions(): TGMapOptions {
-  assertNonNullish(TGOS, "TGOS is fucking null");
+  // assertNonNullish(TGOS, "TGOS is fucking null");
 
   const mapOptions = {
     scaleControl: true,
@@ -34,7 +35,5 @@ function getMapOptions(): TGMapOptions {
 
   return mapOptions;
 }
-
-
 
 export { initTGMap };

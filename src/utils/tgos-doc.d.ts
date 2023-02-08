@@ -74,7 +74,7 @@ export interface TGMapOptions {
   mapBounds?: TGEnvelope;
 }
 
-declare class TGEnvelope {
+export declare class TGEnvelope {
   constructor(left: number, top: number, right: number, bottom: number) {}
 
   isEmpty(): HTMLElement {}
@@ -92,13 +92,13 @@ declare class TGEnvelope {
   setBottom(x: number): void {}
 }
 
-declare class TGPoint {
+export declare class TGPoint {
   constructor(x: number, y: number) {}
   x: number;
   y: number;
 }
 
-declare class TGOnlineMap {
+export declare class TGOnlineMap {
   constructor(node: HTMLElement, coordSys: TGCoordSys, opts?: TGMapOptions) {}
 
   getDiv(): HTMLElement {}
@@ -120,7 +120,7 @@ declare class TGOnlineMap {
 
 interface TGDataOptions {
   map: TGOnlineMap;
-  style: TGStyleOptions;
+  style?: TGStyleOptions;
 }
 
 interface TGGeoJsonOptions {
@@ -145,7 +145,7 @@ interface TGStyleOptions {
   annotation?: object;
 }
 
-declare class TGData {
+export declare class TGData {
   constructor(opts?: TGDataOptions) {}
   add(graphic: TGGraphic | TGGraphicOptions): void {}
   addGeoJson(geoJson: object): TGGraphic[] {}
@@ -158,12 +158,12 @@ interface TGGraphicOptions {
   style?: TGStyleOptions | (() => TGStyleOptions);
 }
 
-declare class TGGeometry {
+export declare class TGGeometry {
   constructor() {}
   getType(): "TGPoint" | "TGLineString" | "TGLinearRing" | "TGPolygon" {}
 }
 
-declare class TGGraphic {
+export declare class TGGraphic {
   constructor(opts?: TGGraphicOptions) {}
   forEachProperty(): unknown {}
   getGeometry(): TGGeometry {}
