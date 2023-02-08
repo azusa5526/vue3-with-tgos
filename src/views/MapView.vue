@@ -7,60 +7,90 @@
 <script setup>
 import { onMounted } from "vue";
 import mygeodata from "../assets/station.json";
-let TGMap = null;
+import { initTGMap } from "@/utils/tgos";
+
 let pMap = null;
+let infoWindow = null;
 let tgosData = null;
 let TGOS = null;
 
 onMounted(async () => {
-  TGMap = document.getElementById("TGMap");
-  pMap = await initTGMap();
-  await loadGeoJson();
+  await initMap();
+  loadGeoJson();
+  processData();
 });
 
-async function initTGMap() {
-  await requireTGOSAPI();
+async function initMap() {
+  const mapElement = document.getElementById("TGMap");
+  pMap = await initTGMap(mapElement);
   TGOS = window.TGOS;
-  console.log("TGOS", TGOS);
-  const map = new TGOS.TGOnlineMap(
-    TGMap,
-    TGOS.TGCoordSys.EPSG3857,
-    getMapOptions()
-  );
-  return map;
+
+  infoWindow = initInfoWindow();
 }
 
-async function requireTGOSAPI() {
-  return new Promise((resolve, reject) => {
-    try {
-      const script = document.createElement("script");
-      const src =
-        "http://api.tgos.tw/TGOS_API/tgos?ver=2.5&AppID=x+JLVSx85Lk=&APIKey=in8W74q0ogpcfW/STwicK8D5QwCdddJf05/7nb+OtDh8R99YN3T0LurV4xato3TpL/fOfylvJ9Wv/khZEsXEWxsBmg+GEj4AuokiNXCh14Rei21U5GtJpIkO++Mq3AguFK/ISDEWn4hMzqgrkxNe1Q==";
-      script.addEventListener("load", resolve);
-      script.src = src;
-      document.head.appendChild(script);
-    } catch (err) {
-      reject(err);
-    }
+function initInfoWindow(options) {
+  let infoWindowOptions = options || {
+    maxWidth: 300,
+    zIndex: 99,
+  };
+  const infoWindow = new TGOS.TGInfoWindow();
+  infoWindow.setOptions(infoWindowOptions);
+
+  return infoWindow;
+}
+
+function openInfoWindow(point, content, offsetState) {
+  console.log("openInfoWindow", infoWindow);
+
+  if (offsetState)
+    infoWindow.setOptions({ pixelOffset: new TGOS.TGSize(0, -32) });
+
+  infoWindow.setPosition(point);
+  infoWindow.setContent(content);
+  infoWindow.open(pMap);
+}
+
+function loadGeoJson() {
+  tgosData = new TGOS.TGData({ map: pMap });
+  tgosData.addGeoJson(mygeodata);
+}
+
+function processData() {
+  tgosData.graphics.forEach((graphic) => {
+    const graphicType = graphic.geometry.type;
+    const processer = new Map([
+      ["TGPoint", pointProcesser],
+      ["TGPolygon", polygonProcesser],
+    ]);
+
+    const suitableProcesser = processer.get(graphicType);
+    suitableProcesser
+      ? suitableProcesser(graphic)
+      : console.error(`Can not process graphic type: ${graphicType}`);
   });
 }
 
-function getMapOptions() {
-  const mapOptions = {
-    scaleControl: true,
-    navigationControl: true,
-    navigationControlOptions: {
-      controlPosition: TGOS.TGControlPosition.TOP_LEFT,
-      navigationControlStyle: TGOS.TGNavigationControlStyle.SMALL,
-    },
-    mapTypeControl: false,
-  };
+function pointProcesser(graphic) {
+  const imgUrl = "./icon/marker.svg";
+  const markerImg = new TGOS.TGImage(
+    imgUrl,
+    new TGOS.TGSize(38, 33),
+    new TGOS.TGPoint(0, 0),
+    new TGOS.TGPoint(16, 33)
+  );
 
-  return mapOptions;
+  graphic.gs_[0].setIcon(markerImg);
+
+  TGOS.TGEvent.addListener(graphic.gs_[0], "click", () => {
+    openInfoWindow(graphic.geometry, graphic.properties.Name, true);
+  });
 }
 
-async function loadGeoJson() {
-  tgosData = new TGOS.TGData({ map: pMap });
-  tgosData.addGeoJson(mygeodata);
+function polygonProcesser(graphic) {
+  graphic.gs_[0].setStrokeWeight(10);
+
+  TGOS.TGEvent.addListener(graphic.gs_[0], "click", (args) => {
+    openInfoWindow(args.point, graphic.properties.Name);
+  });
 }
 </script>
