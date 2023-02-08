@@ -1,20 +1,13 @@
-import type { TGOS } from "./tgos-doc";
+import type { TGOS as TGOSDoc } from "./tgos-doc";
 
-let loaded = false;
+export let TGOS = null as any as TGOSDoc;
 
-export function useTGOSSync(): TGOS {
-  return window.TGOS;
-}
-
-export async function useTGOS(): Promise<TGOS> {
+export async function useTGOS(): Promise<TGOSDoc> {
   await requireTGOSAPI();
-  return window.TGOS;
+  return (TGOS = window.TGOS);
 }
 
 async function requireTGOSAPI() {
-  if (loaded) {
-    return window.TGOS;
-  }
   return new Promise((resolve, reject) => {
     try {
       const script = document.createElement("script");
@@ -23,7 +16,7 @@ async function requireTGOSAPI() {
       script.addEventListener("load", resolve);
       script.src = src;
       document.head.appendChild(script);
-      loaded = true;
+      TGOS = window.TGOS;
     } catch (err) {
       reject(err);
     }

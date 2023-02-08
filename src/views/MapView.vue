@@ -8,13 +8,14 @@
 import { onMounted } from "vue";
 import mygeodata from "../assets/station.json";
 import { initTGMap } from "@/utils/tgos";
+import { TGOS, useTGOS } from "@/utils/use-tgos";
 
 let pMap = null;
 let infoWindow = null;
 let tgosData = null;
-let TGOS = null;
 
 onMounted(async () => {
+  await useTGOS();
   await initMap();
   loadGeoJson();
   processData();
@@ -23,7 +24,6 @@ onMounted(async () => {
 async function initMap() {
   const mapElement = document.getElementById("TGMap");
   pMap = await initTGMap(mapElement);
-  TGOS = window.TGOS;
 
   infoWindow = initInfoWindow();
 }
