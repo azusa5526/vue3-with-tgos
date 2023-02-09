@@ -1,10 +1,46 @@
 <template>
   <main>
-    <div id="TGMap" style="width: 100%; height: 100vh"></div>
+    <TG.Map class="w-full min-h-[60vh]" :center="{ lat: 25.048808, lng: 121.514055 }">
+      <TG.Marker v-if="flag1" :lat="25.048808" :lng="121.514055" @click="onPointClick" />
+      <TG.Marker v-if="flag1" :lat="25.054662" :lng="121.482899" @click="onPointClick" />
+    </TG.Map>
+    <div class="">
+      <button class="hover:bg-sky-400 px-2 py-1 rounded-md" @click="flag1 = true">1 on</button>
+      <button class="hover:bg-sky-400 px-2 py-1 rounded-md" @click="flag1 = false">1 off</button>
+    </div>
   </main>
 </template>
 
 <script setup>
+import { TG } from "@/tgos";
+import { ref } from "vue";
+
+const flag1 = ref(true);
+
+function onPointClick(marker) {
+  openInfoWindow(initInfoWindow(), marker, "jest");
+}
+
+function initInfoWindow(options) {
+  let infoWindowOptions = options || {
+    maxWidth: 300,
+    zIndex: 99,
+  };
+  const infoWindow = new TGOS.TGInfoWindow();
+  infoWindow.setOptions(infoWindowOptions);
+
+  return infoWindow;
+}
+
+function openInfoWindow(infoWindow, marker, content, offsetState) {
+  if (offsetState) infoWindow.setOptions({ pixelOffset: new TGOS.TGSize(0, -32) });
+
+  infoWindow.setPosition(marker.position);
+  infoWindow.setContent(content);
+  infoWindow.open(marker.map);
+}
+
+/*
 import { onMounted } from "vue";
 import mygeodata from "../assets/station.json";
 import mygeodata2 from "../assets/station2.json";
@@ -104,4 +140,5 @@ function polygonProcesser(graphic) {
     openInfoWindow(args.point, graphic.properties.Name);
   });
 }
+*/
 </script>

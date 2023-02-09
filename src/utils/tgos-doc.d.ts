@@ -184,6 +184,7 @@ export interface TGOS {
   TGGeometry: typeof TGGeometry;
   TGPoint: typeof TGPoint;
   TGEnvelope: typeof TGEnvelope;
+  TGCoordSys: { [K in TGCoordSys]: K };
 }
 
 declare global {
